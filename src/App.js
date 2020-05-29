@@ -1,9 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import LoginDialogBox from './components/LoginDialogBox.js'
-import RegisterDialogBox from './components/RegisterDialogBox.js'
-
+import AppBar from './components/AppBar.js'
 function App() {
   return (
     <div className="App">
@@ -21,8 +19,7 @@ function App() {
           Learn React
         </a>
       </header> */}
-      <LoginDialogBox />
-      <RegisterDialogBox />
+      <AppBar />
     </div>
   );
 }

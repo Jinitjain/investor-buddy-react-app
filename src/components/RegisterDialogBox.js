@@ -7,6 +7,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import SendIcon from '@material-ui/icons/Send';
+import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
 import MuiPhoneInput from 'material-ui-phone-number';
 import TocIcon from '@material-ui/icons/Toc';
@@ -84,7 +86,7 @@ export default function RegistrationFormDialog() {
 
     return (
             <div>
-                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+                <Button variant="filled" color="inherit" onClick={handleClickOpen}>
                     Register
                 </Button>
                 <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" className={classes.root}>
@@ -152,10 +154,18 @@ export default function RegistrationFormDialog() {
                             onChange={handleChange} />  
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color="secondary">
+                        <Button 
+                            onClick={handleClose} 
+                            color="secondary" 
+                            startIcon={<CancelIcon />}
+                            variant="contained">
                             Cancel
                         </Button>
-                        <Button onClick={handleSubmit} color="primary">
+                        <Button 
+                            onClick={handleSubmit} 
+                            color="primary" 
+                            endIcon={<SendIcon />}
+                            variant="contained">
                             Submit
                         </Button>
                     </DialogActions>
