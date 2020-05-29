@@ -1,11 +1,13 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import LoginDialogBox from './components/LoginDialogBox.js'
+import RegisterDialogBox from './components/RegisterDialogBox.js'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -18,7 +20,9 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+      </header> */}
+      <LoginDialogBox />
+      <RegisterDialogBox />
     </div>
   );
 }
