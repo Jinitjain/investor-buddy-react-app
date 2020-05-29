@@ -1,7 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Box from '@material-ui/core/Box';
 import AppBar from './components/AppBar.js'
+import ImpactTable from './components/ImpactTable.js'
 function App() {
   return (
     <div className="App">
@@ -20,6 +22,12 @@ function App() {
         </a>
       </header> */}
       <AppBar />
+
+      <div>
+        <Box p={5}>
+          <ImpactTable />
+        </Box>        
+      </div>
     </div>
   );
 }
