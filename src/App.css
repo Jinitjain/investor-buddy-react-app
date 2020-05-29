@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: "Lucida Console", Courier, monospace;
 }
 
 .App-logo {
@@ -11,6 +12,11 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+@font-face {
+  font-family: 'Garamond Regular';
+  src: local('Garamond Regular'), url(./fonts/Garamond_Regular.ttf) format('ttf');
 }
 
 .App-header {
