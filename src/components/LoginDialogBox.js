@@ -11,6 +11,12 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
+import Slide from '@material-ui/core/Slide';
+import DialogContentText from "@material-ui/core/DialogContentText";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,6 +30,8 @@ export default function LoginPortalDialog() {
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
+    const [openSuccessMessage, setOpenSuccessMessage] = React.useState(false)
+    const [openErrorMessage, setOpenErrorMessage] = React.useState(false)
 
     const [state, setState] = React.useState({
         portal : {
@@ -45,15 +53,48 @@ export default function LoginPortalDialog() {
         setOpen(true);
     };
 
+    const handleClickOpenSuccessMessage = () => {
+        setOpenSuccessMessage (true)
+    }
+
+    const handleClickOpenErrorMessage = () => {
+        setOpenErrorMessage (true)
+    }
+
     const handleClose = () => {
         setOpen(false);
         resetState();
     };
 
-    const handleLogin = () => {
+    const handleCloseSuccessMessage = () => {
+        setOpenSuccessMessage(false)
+        resetState()
+    }
+
+    const handleCloseErrorMessage = () => {
+        setOpenErrorMessage(false)
+        resetState()
+        handleClickOpen()
+    }
+
+    const handleLogin = async () => {
         console.log(state.portal.email);
         console.log(state.portal.password);
         // axios request
+
+        const response = await  axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/login', {
+            email: state.portal.email,
+            password: state.portal.password
+        })
+
+        if (response.status === 200) {
+            handleClickOpenSuccessMessage()
+        } else {
+            handleClickOpenErrorMessage()
+        }
+
+        console.log(response)
+
         handleClose();
     };
 
@@ -112,6 +153,48 @@ export default function LoginPortalDialog() {
                             endIcon={<ExitToAppIcon />}
                             variant="contained">
                             Login
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    open={openSuccessMessage}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleCloseSuccessMessage}
+                    aria-labelledby="alert-dialog-slide-title"
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle id="successMessage">{"Login Success"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Your Login to this Portal was Successful
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseSuccessMessage} color="primary">
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    open={openErrorMessage}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleCloseErrorMessage}
+                    aria-labelledby="alert-dialog-slide-title"
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle id="successMessage">{"Login Failure"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Invalid Login Credentails
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseErrorMessage} color="primary">
+                            OK
                         </Button>
                     </DialogActions>
                 </Dialog>
