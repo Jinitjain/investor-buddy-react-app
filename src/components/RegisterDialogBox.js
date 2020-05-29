@@ -17,7 +17,7 @@ import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   root: {
     '& .MuiTextField-root': {
-      margin: theme.spacing(1),
+      margin: theme.spacing(1)
     },
   },
 }));
@@ -89,7 +89,11 @@ export default function RegistrationFormDialog() {
                 <Button variant="filled" color="inherit" onClick={handleClickOpen}>
                     Register
                 </Button>
-                <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" className={classes.root}>
+                <Dialog 
+                    open={open} 
+                    onClose={handleClose} 
+                    aria-labelledby="form-dialog-title" 
+                    className={classes.root}>
                     <DialogTitle id="form-dialog-title">
                         <IconButton>
                             <TocIcon />                            
