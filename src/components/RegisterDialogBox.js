@@ -13,6 +13,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import MuiPhoneInput from 'material-ui-phone-number';
 import TocIcon from '@material-ui/icons/Toc';
 import axios from "axios";
+import Slide from '@material-ui/core/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +31,8 @@ export default function RegistrationFormDialog() {
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
+    const [openSuccessMessage, setOpenSuccessMessage] = React.useState(false)
+    const [openErrorMessage, setOpenErrorMessage] = React.useState(false)
 
     const [state, setState] = React.useState({
         form : {
@@ -53,18 +60,53 @@ export default function RegistrationFormDialog() {
         setOpen(true);
     };
 
+    const handleClickOpenSuccessMessage = () => {
+        setOpenSuccessMessage (true)
+    }
+
+    const handleClickOpenErrorMessage = () => {
+        setOpenErrorMessage (true)
+    }
+
     const handleClose = () => {
         setOpen(false);
         resetState();
     };
 
-    const handleSubmit = () => {
+    const handleCloseSuccessMessage = () => {
+        setOpenSuccessMessage(false)
+        resetState()
+    }
+
+    const handleCloseErrorMessage = () => {
+        setOpenErrorMessage(false)
+        resetState()
+        handleClickOpen()
+    }
+
+    const handleSubmit = async () => {
         console.log(state.form.first_name);
         console.log(state.form.last_name);
         console.log(state.form.email);
         console.log(state.form.contact);
         console.log(state.form.password);
         // axios request
+
+        const response = await  axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/register', {
+            email: state.form.email,
+            password: state.form.password,
+            first_name: state.form.first_name,
+            last_name: state.form.last_name,
+            contact: state.form.contact,
+        })
+        console.log(response)
+
+        if (response.status === 200) {
+            handleClickOpenSuccessMessage()
+        } else {
+            handleClickOpenErrorMessage()
+        }
+
         handleClose();
     };
 
@@ -171,6 +213,48 @@ export default function RegistrationFormDialog() {
                             endIcon={<SendIcon />}
                             variant="contained">
                             Submit
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    open={openSuccessMessage}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleCloseSuccessMessage}
+                    aria-labelledby="alert-dialog-slide-title"
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle id="successMessage">{"Register Success"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Your Registration to this Portal was Successful
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseSuccessMessage} color="primary">
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Dialog
+                    open={openErrorMessage}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleCloseErrorMessage}
+                    aria-labelledby="alert-dialog-slide-title"
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle id="successMessage">{"Register Failure"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Username Already Exists
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseErrorMessage} color="primary">
+                            OK
                         </Button>
                     </DialogActions>
                 </Dialog>
