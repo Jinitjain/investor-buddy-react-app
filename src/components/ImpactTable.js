@@ -38,10 +38,19 @@ const columns = [
   { id: 'news_source', label: 'News Source', minWidth: 80, align: 'right' },
 ];
 
-function createData(ticker, company_name, impact, last_updated) {
-  const news_source = impact / last_updated;
+function createData(ticker, company_name, impact, last_updated, news_source) {
   return { ticker, company_name, impact, last_updated, news_source };
 }
+
+
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+  },
+  container: {
+    maxHeight: 650,
+  },
+});
 
 const rows = [
   createData('India', 'IN', 1324171354, 3287263),
@@ -61,19 +70,13 @@ const rows = [
   createData('Brazil', 'BR', 210147125, 8515767),
 ];
 
-const useStyles = makeStyles({
-  root: {
-    width: '100%',
-  },
-  container: {
-    maxHeight: 650,
-  },
-});
 
 export default function StickyHeadTable() {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowss, setRowss] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -83,6 +86,32 @@ export default function StickyHeadTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  React.useEffect(() => {
+    console.log("Started")
+    setIsLoading(true)
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'React POST Request Example' })
+    };
+
+    fetch('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', requestOptions)
+      .then(results => results.json())
+      .then(data => {
+        console.log("Data is here")
+        console.log(data) 
+        Object.keys(data.table).map((e,i) => {
+          console.log(i, " ", data.table[i])
+          const temp = []
+          temp.push(createData(data.table[i].symbol, data.table[i].company, data.table[i].sentiment,
+             data.table[i].date, data.table[i].news))
+        })
+        setRowss(data)
+        setIsLoading(false)
+      });
+    }, []);
 
   return (
     <Box p={5}>
@@ -103,7 +132,7 @@ export default function StickyHeadTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+              {rowss.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                 return (
                   <StyledTableRow hover >
                     {columns.map((column) => {
