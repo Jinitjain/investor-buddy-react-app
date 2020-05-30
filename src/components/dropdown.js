@@ -10,7 +10,7 @@ function DropDown(){
         float: 'left',
         width: "500px",
         margin: "auto",
-        border: "3px solid black",
+        // border: "3px solid black",
         padding: '20px'
         
     }

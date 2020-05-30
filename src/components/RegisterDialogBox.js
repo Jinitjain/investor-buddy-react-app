@@ -14,6 +14,8 @@ import MuiPhoneInput from 'material-ui-phone-number';
 import TocIcon from '@material-ui/icons/Toc';
 import axios from "axios";
 import Slide from '@material-ui/core/Slide';
+import {useSelector, useDispatch} from 'react-redux'
+import actions from '../actions'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -29,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
 export default function RegistrationFormDialog() {
 
     const classes = useStyles();
+
+    const isLoggedIn = useSelector(state => state.isLoggedIn)
+    const dispatch = useDispatch()
 
     const [open, setOpen] = React.useState(false);
     const [openSuccessMessage, setOpenSuccessMessage] = React.useState(false)
@@ -76,6 +81,8 @@ export default function RegistrationFormDialog() {
     const handleCloseSuccessMessage = () => {
         setOpenSuccessMessage(false)
         resetState()
+        dispatch(actions.signIn())
+        console.log(isLoggedIn)
     }
 
     const handleCloseErrorMessage = () => {
@@ -102,7 +109,7 @@ export default function RegistrationFormDialog() {
         console.log(response)
 
         if (response.status === 200) {
-            handleClickOpenSuccessMessage()
+            await handleClickOpenSuccessMessage()
         } else {
             handleClickOpenErrorMessage()
         }

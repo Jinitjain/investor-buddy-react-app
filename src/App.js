@@ -1,11 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Box from '@material-ui/core/Box';
 import AppBar from './components/AppBar.js'
 import ImpactTable from './components/ImpactTable.js'
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import Dropdown from './components/dropdown'
+import AnimatedMultiselectList from './components/MultiselectList'
 
 function App() {
   return (
@@ -23,6 +23,13 @@ function App() {
           <Route
               path="/dropdown"
               component={Dropdown}
+          />
+      </Router>
+
+      <Router>
+          <Route
+              path="/multiselectlist"
+              component={AnimatedMultiselectList}
           />
       </Router>
     </div>

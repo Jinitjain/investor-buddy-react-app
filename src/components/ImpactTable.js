@@ -53,21 +53,11 @@ const useStyles = makeStyles({
 });
 
 const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  createData('United States', 'US', 327167434, 9833520),
-  createData('Canada', 'CA', 37602103, 9984670),
-  createData('Australia', 'AU', 25475400, 7692024),
-  createData('Germany', 'DE', 83019200, 357578),
-  createData('Ireland', 'IE', 4857000, 70273),
-  createData('Mexico', 'MX', 126577691, 1972550),
-  createData('Japan', 'JP', 126317000, 377973),
-  createData('France', 'FR', 67022000, 640679),
-  createData('United Kingdom', 'GB', 67545757, 242495),
-  createData('Russia', 'RU', 146793744, 17098246),
-  createData('Nigeria', 'NG', 200962417, 923768),
-  createData('Brazil', 'BR', 210147125, 8515767),
+  createData('Frozen yoghurt', 159, 6.0, 24, 'https://stackoverflow.com/questions/57136853/make-a-material-ui-component-in-react-sticky-when-scrolling-not-appbar'),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
 
@@ -114,8 +104,8 @@ export default function StickyHeadTable() {
     }, []);
 
   return (
-    <Box p={5}>
-      <Card className={classes.root} raised="true">
+    <Box p={5} px={12}>
+      <Card className={classes.root} raised={true}>
         <TableContainer className={classes.container} >
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -139,7 +129,7 @@ export default function StickyHeadTable() {
                       const value = row[column.id];
                       return (
                         <StyledTableCell key={column.id} align={column.align}>
-                          {value}
+                          {column.id === 'news_source' ? <a href={value}>{value}</a> : value}
                         </StyledTableCell>
                       );
                     })}

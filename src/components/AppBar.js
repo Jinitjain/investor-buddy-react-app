@@ -8,7 +8,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import LoginDialogBox from './LoginDialogBox.js'
 import RegisterDialogBox from './RegisterDialogBox.js'
-
+import {useSelector, useDispatch} from 'react-redux'
+import actions from "../actions";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -24,6 +25,14 @@ const useStyles = makeStyles((theme) => ({
 export default function ButtonAppBar() {
   const classes = useStyles();
 
+  const isLoggedIn = useSelector(state => state.isLoggedIn)
+  const dispatch = useDispatch()
+
+  const handleClickOpen = () => {
+    dispatch(actions.signOut())
+    console.log(isLoggedIn)
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{background:"#009688"}} >
@@ -34,8 +43,13 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title} >
             Investor Buddy
           </Typography>
-          <LoginDialogBox />
-          <RegisterDialogBox />
+          {!isLoggedIn ? <LoginDialogBox /> : ''}
+          {!isLoggedIn ? <RegisterDialogBox /> : ''}
+          {isLoggedIn ?
+            <Button variant="filled" color="inherit" onClick={handleClickOpen}>
+              LogOut
+            </Button>
+          : ''}
         </Toolbar>
       </AppBar>
     </div>
