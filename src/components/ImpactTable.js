@@ -66,7 +66,7 @@ export default function StickyHeadTable() {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [rowss, setRowss] = React.useState(null);
+  const [rowss, setRowss] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(true)
 
   const handleChangePage = (event, newPage) => {
@@ -111,19 +111,26 @@ export default function StickyHeadTable() {
     })
 
     setIsLoading(false)
+    let ii = 0
     Object.keys(response.data.table).map((e,i) => {
+      ii += 1
             console.log(i, " ", response.data.table[i])
             temp.push(createData(response.data.table[i].symbol, response.data.table[i].company, response.data.table[i].sentiment,
               response.data.table[i].date, response.data.table[i].news))
-              setRowss(temp)
+              setRowss(false)  
+              if (ii == 3) {
+                console.log("Done done done")
+                setIsLoading(false)
+              }
           })
+         
+    console.log(rowss);
     
-    console.log(rowss)
   }, [])
 
   return (
       <div>
-      {!isLoading ?
+      {!rowss ? 
         <Box p={5} px={12}>
           <Card className={classes.root} raised={true}>
             <TableContainer className={classes.container} >
@@ -140,7 +147,7 @@ export default function StickyHeadTable() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {rowss.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     return <StyledTableRow hover >
                           {columns.map((column) => {
                             const value = row[column.id];
