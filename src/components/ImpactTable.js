@@ -112,7 +112,7 @@ export default function StickyHeadTable() {
 
     setIsLoading(false)
     console.log(response.data)
-  })
+  }, [])
 
   return (
       <div>
