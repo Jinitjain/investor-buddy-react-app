@@ -13,7 +13,7 @@ function App() {
       <AppBar />
 
       <div>
-        <Box p={5}>
+        <Box p={5} px={12}>
           <ImpactTable />
         </Box>        
       </div>
