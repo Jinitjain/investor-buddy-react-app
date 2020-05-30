@@ -111,7 +111,15 @@ export default function StickyHeadTable() {
     })
 
     setIsLoading(false)
-    console.log(response.data)
+
+    Object.keys(response.data.table).map((e,i) => {
+            console.log(i, " ", response.data.table[i])
+            temp.push(createData(response.data.table[i].symbol, response.data.table[i].company, response.data.table[i].sentiment,
+              response.data.table[i].date, response.data.table[i].news))
+              setRowss(temp)
+          })
+    
+    console.log(rowss)
   }, [])
 
   return (
