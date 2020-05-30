@@ -12,14 +12,18 @@ function App() {
     <div className="App">
       <AppBar />
 
-      <div>
-        <Box p={5}>
-          <ImpactTable />
-        </Box>        
-      </div>
+      <Router>
+          <Route
+              path='/table'
+              component={ImpactTable}
+          />
+      </Router>
       
       <Router>
-          <Route path="/dropdown" component={Dropdown} />
+          <Route
+              path="/dropdown"
+              component={Dropdown}
+          />
       </Router>
     </div>
   );
