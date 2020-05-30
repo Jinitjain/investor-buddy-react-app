@@ -10,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import {Box} from "@material-ui/core";
+import axios from 'axios'
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -66,7 +67,7 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [rowss, setRowss] = React.useState(null);
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -77,9 +78,8 @@ export default function StickyHeadTable() {
     setPage(0);
   };
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     console.log("Started")
-    setIsLoading(true)
 
     const requestOptions = {
       method: 'POST',
@@ -87,68 +87,81 @@ export default function StickyHeadTable() {
       body: JSON.stringify({ title: 'React POST Request Example' })
     };
 
-    fetch('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', requestOptions)
-      .then(results => results.json())
-      .then(data => {
-        console.log("Data is here")
-        console.log(data) 
-        Object.keys(data.table).map((e,i) => {
-          console.log(i, " ", data.table[i])
-          const temp = []
-          temp.push(createData(data.table[i].symbol, data.table[i].company, data.table[i].sentiment,
-             data.table[i].date, data.table[i].news))
-        })
-        setRowss(data)
-        setIsLoading(false)
-      });
-    }, []);
+    const temp = []
+
+    // fetch('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', requestOptions)
+    //   .then(results => results.json())
+    //   .then(data => {
+    //     console.log("Data is here")
+    //     console.log(data)
+    //     Object.keys(data.table).map((e,i) => {
+    //       console.log(i, " ", data.table[i])
+    //       temp.push(createData(data.table[i].symbol, data.table[i].company, data.table[i].sentiment,
+    //          data.table[i].date, data.table[i].news))
+    //     })
+    //     setRowss(temp)
+    //     console.log(rowss)
+    //     console.log(isLoading)
+    //     setIsLoading(false)
+    //   });
+    // }, []);
+
+    const response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
+      user: 'j@j.com'
+    })
+
+    setIsLoading(false)
+    console.log(response.data)
+  })
 
   return (
-    <Box p={5} px={12}>
-      <Card className={classes.root} raised={true}>
-        <TableContainer className={classes.container} >
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <StyledTableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </StyledTableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rowss.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                return (
-                  <StyledTableRow hover >
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <StyledTableCell key={column.id} align={column.align}>
-                          {column.id === 'news_source' ? <a href={value}>{value}</a> : value}
-                        </StyledTableCell>
-                      );
-                    })}
-                  </StyledTableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Card>
-    </Box>
-  );
+      <div>
+      {!isLoading ?
+        <Box p={5} px={12}>
+          <Card className={classes.root} raised={true}>
+            <TableContainer className={classes.container} >
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <TableRow>
+                    {columns.map((column) => <StyledTableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{ minWidth: column.minWidth }}
+                        >
+                          {column.label}
+                        </StyledTableCell>)}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                    return <StyledTableRow hover >
+                          {columns.map((column) => {
+                            const value = row[column.id];
+                            return (
+                                <StyledTableCell key={column.id} align={column.align}>
+                                  {column.id === 'news_source' ? <a href={value}>{value}</a> : value}
+                                </StyledTableCell>
+                            );
+                          })}
+                        </StyledTableRow>;
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          </Card>
+        </Box>
+
+        : <p>Load ho raha hai bhai</p>
+  }
+  </div>
+  )
 }
