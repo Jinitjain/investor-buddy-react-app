@@ -1,25 +1,36 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Box from '@material-ui/core/Box';
 import AppBar from './components/AppBar.js'
 import ImpactTable from './components/ImpactTable.js'
 import {BrowserRouter as Router, Route} from "react-router-dom";
 import Dropdown from './components/dropdown'
+import AnimatedMultiselectList from './components/MultiselectList'
 
 function App() {
   return (
     <div className="App">
       <AppBar />
 
-      <div>
-        <Box p={5} px={12}>
-          <ImpactTable />
-        </Box>        
-      </div>
+      <Router>
+          <Route
+              path='/table'
+              component={ImpactTable}
+          />
+      </Router>
       
       <Router>
-          <Route path="/dropdown" component={Dropdown} />
+          <Route
+              path="/dropdown"
+              component={Dropdown}
+          />
+      </Router>
+
+      <Router>
+          <Route
+              path="/multiselectlist"
+              component={AnimatedMultiselectList}
+          />
       </Router>
     </div>
   );

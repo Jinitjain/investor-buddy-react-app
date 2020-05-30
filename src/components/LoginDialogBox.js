@@ -13,6 +13,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
 import Slide from '@material-ui/core/Slide';
 import DialogContentText from "@material-ui/core/DialogContentText";
+import {useSelector, useDispatch} from 'react-redux'
+import actions from '../actions'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -26,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function LoginPortalDialog() {
+
+    const isLoggedIn = useSelector(state => state.isLoggedIn)
+    const dispatch = useDispatch()
 
     const classes = useStyles();
 
@@ -69,6 +74,8 @@ export default function LoginPortalDialog() {
     const handleCloseSuccessMessage = () => {
         setOpenSuccessMessage(false)
         resetState()
+        dispatch(actions.signIn())
+        console.log(isLoggedIn)
     }
 
     const handleCloseErrorMessage = () => {
