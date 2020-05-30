@@ -66,7 +66,7 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [rowss, setRowss] = React.useState(null);
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -92,13 +92,15 @@ export default function StickyHeadTable() {
       .then(data => {
         console.log("Data is here")
         console.log(data) 
+        const temp = []
         Object.keys(data.table).map((e,i) => {
           console.log(i, " ", data.table[i])
-          const temp = []
+          
           temp.push(createData(data.table[i].symbol, data.table[i].company, data.table[i].sentiment,
              data.table[i].date, data.table[i].news))
         })
-        setRowss(data)
+        setRowss(temp)
+        console.log("this is temp", temp)
         setIsLoading(false)
       });
     }, []);
@@ -122,7 +124,7 @@ export default function StickyHeadTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rowss.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                 return (
                   <StyledTableRow hover >
                     {columns.map((column) => {
