@@ -42,13 +42,6 @@ function createData(ticker, company_name, impact, last_updated, news_source) {
   return { ticker, company_name, impact, last_updated, news_source };
 }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 'https://stackoverflow.com/questions/57136853/make-a-material-ui-component-in-react-sticky-when-scrolling-not-appbar'),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const useStyles = makeStyles({
   root: {
@@ -59,10 +52,21 @@ const useStyles = makeStyles({
   },
 });
 
+const rows = [
+  createData('Frozen yoghurt', 159, 6.0, 24, 'https://stackoverflow.com/questions/57136853/make-a-material-ui-component-in-react-sticky-when-scrolling-not-appbar'),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+];
+
+
 export default function StickyHeadTable() {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowss, setRowss] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -72,6 +76,32 @@ export default function StickyHeadTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  React.useEffect(() => {
+    console.log("Started")
+    setIsLoading(true)
+
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'React POST Request Example' })
+    };
+
+    fetch('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', requestOptions)
+      .then(results => results.json())
+      .then(data => {
+        console.log("Data is here")
+        console.log(data) 
+        Object.keys(data.table).map((e,i) => {
+          console.log(i, " ", data.table[i])
+          const temp = []
+          temp.push(createData(data.table[i].symbol, data.table[i].company, data.table[i].sentiment,
+             data.table[i].date, data.table[i].news))
+        })
+        setRowss(data)
+        setIsLoading(false)
+      });
+    }, []);
 
   return (
     <Box p={5} px={12}>
@@ -92,7 +122,7 @@ export default function StickyHeadTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+              {rowss.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                 return (
                   <StyledTableRow hover >
                     {columns.map((column) => {
