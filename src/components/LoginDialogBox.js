@@ -95,7 +95,7 @@ export default function LoginPortalDialog() {
         })
 
         if (response.status === 200) {
-            handleClickOpenSuccessMessage()
+            await handleClickOpenSuccessMessage()
         } else {
             handleClickOpenErrorMessage()
         }
