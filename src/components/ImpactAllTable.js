@@ -152,7 +152,8 @@ export default function StickyHeadTable() {
                             const value = row[column.id];
                             return (
                                 <StyledTableCell key={column.id} align={column.align}>
-                                  {column.id === 'news_source' ? <a href={value}>{value}</a> : value}
+                                  {column.id === 'news_source' ? 
+                                  Array.from(row[column.id]).map(url => <a href={value} target="_blank">{value}</a>): value}
                                 </StyledTableCell>
                             );
                           })}
