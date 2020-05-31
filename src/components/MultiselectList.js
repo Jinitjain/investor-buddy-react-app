@@ -49,7 +49,7 @@ export default function AnimatedMultiselectList() {
 
       if(response.status === 200) {
           console.log("Done")
-          history.push('/multiselectlist')
+          history.push('/table')
       }
     };
 
