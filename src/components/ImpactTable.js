@@ -11,6 +11,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import {Box} from "@material-ui/core";
 import axios from 'axios'
+import Cookies from 'universal-cookie'
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -67,6 +68,9 @@ const rows = [
   
 ];
 
+const cookies = new Cookies();
+const username = cookies.get('user');
+
 function news_sources(news_source) {
   return Array.from(news_source).map((url, index) => 
   <p>
@@ -96,9 +100,8 @@ export default function StickyHeadTable() {
 
   React.useEffect( () => {
     // Timer is in minute you want to refetch the data from api
+    console.log(username)
     let timer = 10;
-    //let user1 = "j@j.com"
-    console.log(user)
     if (onlyOnceLoad) {
       console.log("Started Once")
       const temp = []
@@ -143,9 +146,13 @@ export default function StickyHeadTable() {
       console.log("Started")
       const temp = []
 
+      console.log("Outside fetchJson")
+      console.log(username)
       async function fetchJSON() {
+        console.log("Inside fetchJson")
+        console.log(username)
         var response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
-          user: user
+          user: username
         })
 
         var table = await JSON.parse(JSON.stringify([...response.data.table]))

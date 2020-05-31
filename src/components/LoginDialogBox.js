@@ -16,6 +16,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import {useSelector, useDispatch} from 'react-redux'
 import actions from '../actions'
 import {useHistory} from 'react-router-dom'
+import Cookies from 'universal-cookie'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -28,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
+const cookies = new Cookies();
 
 export default function LoginPortalDialog() {
 
@@ -100,9 +103,9 @@ export default function LoginPortalDialog() {
         })
 
         if (response.status === 200) {
-            localStorage.setItem('user', state.portal.email);
-            const username = localStorage.getItem('user')
-            console.log(username)
+            cookies.set('user', state.portal.email);
+            console.log("Idhar hai9 hum")
+            console.log(cookies.get('user'))
             handleClickOpenSuccessMessage()
         } else {
             handleClickOpenErrorMessage()
