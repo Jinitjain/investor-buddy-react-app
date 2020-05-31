@@ -67,7 +67,8 @@ export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [rowss, setRowss] = React.useState(rows);
-  const [isLoading, setIsLoading] = React.useState(true)
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [onlyOnceLoad, setOnlyOnceLoad] = React.useState(true)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -79,48 +80,84 @@ export default function StickyHeadTable() {
   };
 
   React.useEffect(async () => {
-    console.log("Started")
+    // Timer is in minute you want to refetch the data from api
+    let timer = 5;
+    if (onlyOnceLoad) {
+      console.log("Started Once")
+      const temp = []
 
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'React POST Request Example' })
-    };
+      async function fetchJSON() {
+        var response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
+          user: 'j@j.com'
+        })
 
-    const temp = []
+        var table = await JSON.parse(JSON.stringify([...response.data.table]))
+        return table
+      };
+      const table = await fetchJSON();
+      // console.log("TAble ",await table )
+      setIsLoading(false);
 
-    async function fetchJSON() {
-      var response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
-        user: 'j@j.com'
-      })
-
-      var table = await JSON.parse(JSON.stringify([...response.data.table]))
-      return table
-    }
-    const table = await fetchJSON()
-    //console.log("TAble ",await table )
-    setIsLoading(false)
-
-    let ii = 0
-    let obj =  Object.keys(await table).map(async (e,i) => {
-      ii += 1
-            console.log(i, " ",await table[ii])
-              temp.push(createData(table[i].symbol,table[i].company, table[i].sentiment,
-                table[i].date, table[i].news))
-               
-              if (ii === table.length) {
-                // console.log("Done done done")
-                let result = JSON.stringify([...temp])
-                // console.log("Result", JSON.parse(result))
-                // console.log("Initial", rows)
-                setRowss(JSON.parse(result))
-                setIsLoading(false)
+      let ii = 0
+      let obj =  Object.keys(await table).map(async (e,i) => {
+        ii += 1
+              // console.log(i, " ",await table[ii])
+                temp.push(createData(table[i].symbol,table[i].company, table[i].sentiment,
+                  table[i].date, table[i].news))
                 
-              }
-          })
-         
-    console.log(isLoading, rowss);
-    
+                if (ii === table.length) {
+                  // console.log("Done done done")
+                  let result = JSON.stringify([...temp])
+                  // console.log("Result", JSON.parse(result))
+                  // console.log("Initial", rows)
+                  setRowss(JSON.parse(result))
+                  setIsLoading(false)
+                  
+                }
+            })
+          
+      console.log(isLoading, rowss);
+      setOnlyOnceLoad(false);
+    }
+
+    const intervalId = setInterval(async() => {
+      console.log("Started")
+      const temp = []
+
+      async function fetchJSON() {
+        var response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
+          user: 'j@j.com'
+        })
+
+        var table = await JSON.parse(JSON.stringify([...response.data.table]))
+        return table
+      };
+      const table = await fetchJSON();
+      console.log("TAble ",await table )
+      setIsLoading(false);
+
+      let ii = 0
+      let obj =  Object.keys(await table).map(async (e,i) => {
+        ii += 1
+              console.log(i, " ",await table[ii])
+                temp.push(createData(table[i].symbol,table[i].company, table[i].sentiment,
+                  table[i].date, table[i].news))
+                
+                if (ii === table.length) {
+                  // console.log("Done done done")
+                  let result = JSON.stringify([...temp])
+                  // console.log("Result", JSON.parse(result))
+                  // console.log("Initial", rows)
+                  setRowss(JSON.parse(result))
+                  setIsLoading(false)
+                  
+                }
+            })
+          
+      console.log(isLoading, rowss);
+    }, 1000*timer*60)
+
+  return () => clearInterval(intervalId); //This is important
   }, [])
 
   return (
