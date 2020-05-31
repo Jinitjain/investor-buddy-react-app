@@ -36,7 +36,7 @@ const columns = [
   { id: 'company_name', label: 'Company Name', minWidth: 40 },
   { id: 'impact', label: 'Expected Impact', minWidth: 20, align: 'right' },
   { id: 'last_updated', label: 'Last Updated', minWidth: 20, align: 'right' },
-  { id: 'news_source', label: 'News Source', minWidth: 80, align: 'right' },
+  { id: 'news_source', label: 'News Source', minWidth: 80, align: 'center' },
 ];
 
 function createData(ticker, company_name, impact, last_updated, news_source) {
@@ -52,6 +52,14 @@ const useStyles = makeStyles({
     maxHeight: 650,
   },
 });
+
+function news_sources(news_source) {
+    return Array.from(news_source).map((url, index) => 
+    <p>
+        <a href={url} target="_blank">Link {index+1}</a>
+    </p>
+    );
+}
 
 const rows = [
   // createData('Frozen yoghurt', 159, 6.0, 24, 'https://stackoverflow.com/questions/57136853/make-a-material-ui-component-in-react-sticky-when-scrolling-not-appbar'),
@@ -153,7 +161,7 @@ export default function StickyHeadTable() {
                             return (
                                 <StyledTableCell key={column.id} align={column.align}>
                                   {column.id === 'news_source' ? 
-                                  Array.from(row[column.id]).map(url => <a href={value} target="_blank">{value}</a>): value}
+                                  news_sources(row[column.id]): value}
                                 </StyledTableCell>
                             );
                           })}
