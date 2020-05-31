@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import {Box} from "@material-ui/core";
 import companies from '../data/companyDatafinal.json'
 import axios from 'axios'
+import {useHistory} from 'react-router-dom'
 
 const animatedComponents = makeAnimated();
 
@@ -27,6 +28,7 @@ const user = localStorage.getItem('user')
 export default function AnimatedMultiselectList() {
 
   const classes = useStyles();
+  const history = useHistory();
 
   const [state, setState] = React.useState({
     selectedList: ''
@@ -49,6 +51,7 @@ export default function AnimatedMultiselectList() {
 
       if(response.status === 200) {
           console.log("Done")
+          history.push('/multiselectlist')
       }
     };
 

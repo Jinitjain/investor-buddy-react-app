@@ -16,6 +16,7 @@ import axios from "axios";
 import Slide from '@material-ui/core/Slide';
 import {useSelector, useDispatch} from 'react-redux'
 import actions from '../actions'
+import {useHistory} from 'react-router-dom'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 export default function RegistrationFormDialog() {
 
     const classes = useStyles();
+    const history = useHistory();
 
     const isLoggedIn = useSelector(state => state.isLoggedIn)
     const dispatch = useDispatch()
@@ -83,6 +85,7 @@ export default function RegistrationFormDialog() {
         resetState()
         dispatch(actions.signIn())
         console.log(isLoggedIn)
+        history.push('/multiselectlist')
     }
 
     const handleCloseErrorMessage = () => {
