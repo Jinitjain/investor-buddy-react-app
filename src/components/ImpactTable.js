@@ -57,8 +57,8 @@ const rows = [
   createData('Frozen yoghurt', 159, 6.0, 24, 'https://stackoverflow.com/questions/57136853/make-a-material-ui-component-in-react-sticky-when-scrolling-not-appbar'),
   createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
   createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  // createData('Cupcake', 305, 3.7, 67, 4.3),
+  // createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
 
@@ -66,7 +66,7 @@ export default function StickyHeadTable() {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [rowss, setRowss] = React.useState(true);
+  const [rowss, setRowss] = React.useState(rows);
   const [isLoading, setIsLoading] = React.useState(true)
 
   const handleChangePage = (event, newPage) => {
@@ -89,48 +89,43 @@ export default function StickyHeadTable() {
 
     const temp = []
 
-    // fetch('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', requestOptions)
-    //   .then(results => results.json())
-    //   .then(data => {
-    //     console.log("Data is here")
-    //     console.log(data)
-    //     Object.keys(data.table).map((e,i) => {
-    //       console.log(i, " ", data.table[i])
-    //       temp.push(createData(data.table[i].symbol, data.table[i].company, data.table[i].sentiment,
-    //          data.table[i].date, data.table[i].news))
-    //     })
-    //     setRowss(temp)
-    //     console.log(rowss)
-    //     console.log(isLoading)
-    //     setIsLoading(false)
-    //   });
-    // }, []);
+    async function fetchJSON() {
+      var response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
+        user: 'j@j.com'
+      })
 
-    const response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
-      user: 'j@j.com'
-    })
-
+      var table = await JSON.parse(JSON.stringify([...response.data.table]))
+      return table
+    }
+    const table = await fetchJSON()
+    //console.log("TAble ",await table )
     setIsLoading(false)
+
     let ii = 0
-    Object.keys(response.data.table).map((e,i) => {
+    let obj =  Object.keys(await table).map(async (e,i) => {
       ii += 1
-            console.log(i, " ", response.data.table[i])
-            temp.push(createData(response.data.table[i].symbol, response.data.table[i].company, response.data.table[i].sentiment,
-              response.data.table[i].date, response.data.table[i].news))
-              setRowss(false)  
-              if (ii == 3) {
-                console.log("Done done done")
+            console.log(i, " ",await table[ii])
+              temp.push(createData(table[i].symbol,table[i].company, table[i].sentiment,
+                table[i].date, table[i].news))
+               
+              if (ii === table.length) {
+                // console.log("Done done done")
+                let result = JSON.stringify([...temp])
+                // console.log("Result", JSON.parse(result))
+                // console.log("Initial", rows)
+                setRowss(JSON.parse(result))
                 setIsLoading(false)
+                
               }
           })
          
-    console.log(rowss);
+    console.log(isLoading, rowss);
     
   }, [])
 
   return (
       <div>
-      {!rowss ? 
+      {!isLoading ? 
         <Box p={5} px={12}>
           <Card className={classes.root} raised={true}>
             <TableContainer className={classes.container} >
@@ -165,7 +160,7 @@ export default function StickyHeadTable() {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={rows.length}
+                count={rowss.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}
