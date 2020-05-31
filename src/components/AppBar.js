@@ -54,11 +54,20 @@ export default function ButtonAppBar() {
           : ''}
 
           {isLoggedIn ?
-                <Link to="/table">
                   <Button variant="filled" color="inherit">
+                    <Link to='/table'>
                     Table
+                    </Link>
                   </Button>
-                </Link>
+                
+              : ''}
+
+            {isLoggedIn ?
+                  <Button variant="filled" color="inherit">
+                    <Link to='/alltable'>
+                    All Companies
+                    </Link>
+                  </Button>
               : ''}
         </Toolbar>
       </AppBar>

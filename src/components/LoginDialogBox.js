@@ -143,8 +143,7 @@ export default function LoginPortalDialog() {
                             variant="outlined" 
                             onChange={handleChange} />
                         <TextField 
-                            required 
-                            autoFocus 
+                            required  
                             margin="dense" 
                             name="password" 
                             label="Password" 

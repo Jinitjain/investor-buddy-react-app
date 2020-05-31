@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import AppBar from './components/AppBar.js'
 import ImpactTable from './components/ImpactTable.js'
+import ImpactAllTable from './components/ImpactAllTable'
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Dropdown from './components/dropdown'
 import AnimatedMultiselectList from './components/MultiselectList'
@@ -31,6 +32,11 @@ function App() {
               <Route
                   path="/multiselectlist"
                   component={AnimatedMultiselectList}
+              />
+
+              <Route
+                  path="/alltable"
+                  component={ImpactAllTable}
               />
           </Switch>
             : <Redirect push to="/" />}

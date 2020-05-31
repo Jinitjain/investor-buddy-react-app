@@ -67,15 +67,12 @@ const rows = [
   
 ];
 
-const user = localStorage.getItem('user')
-
 export default function StickyHeadTable() {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [rowss, setRowss] = React.useState(rows);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [onlyOnceLoad, setOnlyOnceLoad] = React.useState(true)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -86,74 +83,33 @@ export default function StickyHeadTable() {
     setPage(0);
   };
 
-  React.useEffect( () => {
-    // Timer is in minute you want to refetch the data from api
-    let timer = 5;
-    // let user1 = "j@j.com"
-    console.log(user)
-    if (onlyOnceLoad) {
-      console.log("Started Once")
-      const temp = []
+  React.useEffect(() => {
+    // Rename with proper user name which will retreeve all the companies 
+    let user1 = "j@j.com"
+    console.log(user1)
+    console.log("Started Only Once")
+    const temp = []
 
-      async function fetchJSON() {
+    async function fetchJSON() {
+        // TODO: Update the link to fetch the all companies data
         var response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
-          user: user
+            user: user1
+        
         })
-
-        var table = await JSON.parse(JSON.stringify([...response.data.table]))
-        // return table
-
-      //  const table = await fetchJSON();
-      // console.log("TAble ",await table )
-        setIsLoading(false);
-
-        let ii = 0
-        let obj =  Object.keys(await table).map(async (e,i) => {
-          ii += 1
-                // console.log(i, " ",await table[ii])
-                  temp.push(createData(table[i].symbol,table[i].company, table[i].sentiment,
-                    table[i].date, table[i].news))
-                  
-                  if (ii === table.length) {
-                    // console.log("Done done done")
-                    let result = JSON.stringify([...temp])
-                    // console.log("Result", JSON.parse(result))
-                    // console.log("Initial", rows)
-                    setRowss(JSON.parse(result))
-                    setIsLoading(false)
-                    
-                  }
-              })
-            
-      };
-      fetchJSON()
-      console.log(isLoading, rowss);
-      setOnlyOnceLoad(false);
-    }
-
-    const intervalId = setInterval(() => {
-      console.log("Started")
-      const temp = []
-
-      async function fetchJSON() {
-        var response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
-          user: user
-        })
-
         var table = await JSON.parse(JSON.stringify([...response.data.table]))
         // return table
         // const table = await fetchJSON();
         // console.log("TAble ",await table )
         setIsLoading(false);
-  
+
         let ii = 0
         let obj =  Object.keys(await table).map(async (e,i) => {
-          ii += 1
+        ii += 1
                 // console.log(i, " ",await table[ii])
-                  temp.push(createData(table[i].symbol,table[i].company, table[i].sentiment,
+                temp.push(createData(table[i].symbol,table[i].company, table[i].sentiment,
                     table[i].date, table[i].news))
-                  
-                  if (ii === table.length) {
+                
+                if (ii === table.length) {
                     // console.log("Done done done")
                     let result = JSON.stringify([...temp])
                     // console.log("Result", JSON.parse(result))
@@ -161,15 +117,14 @@ export default function StickyHeadTable() {
                     setRowss(JSON.parse(result))
                     setIsLoading(false)
                     
-                  }
-              })
-      };
-     
-      fetchJSON();    
-      console.log(isLoading, rowss);
-    }, 1000*timer*60)
-
-  return () => clearInterval(intervalId); //This is important
+                }
+            })
+        
+    };
+    
+    fetchJSON();
+    
+    console.log(isLoading, rowss);
   }, [])
 
   return (
