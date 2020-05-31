@@ -6,13 +6,19 @@ import ImpactTable from './components/ImpactTable.js'
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Dropdown from './components/dropdown'
 import AnimatedMultiselectList from './components/MultiselectList'
+import {useSelector} from "react-redux";
+import {Redirect} from 'react-router-dom'
 
 function App() {
+
+    const isLoggedIn = useSelector(state => state.isLoggedIn)
+
   return (
     <div className="App">
     <Router>
       <AppBar />
 
+        {isLoggedIn ?
           <Switch>
               <Route
                   path='/table'
@@ -27,6 +33,7 @@ function App() {
                   component={AnimatedMultiselectList}
               />
           </Switch>
+            : <Redirect push to="/" />}
     </Router>
 
     </div>
