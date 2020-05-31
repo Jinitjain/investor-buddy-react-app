@@ -170,7 +170,6 @@ export default function RegistrationFormDialog() {
                             onChange={handleChange} />
                         <TextField 
                             required 
-                            autoFocus 
                             margin="dense" 
                             name="last_name" 
                             label="Last Name" 
@@ -183,7 +182,6 @@ export default function RegistrationFormDialog() {
                             required 
                             defaultCountry="in" 
                             regions={'asia'} 
-                            autoFocus 
                             margin="dense" 
                             name="contact" 
                             label="Phone Number" 
@@ -191,7 +189,6 @@ export default function RegistrationFormDialog() {
                             onChange={handlePhoneChange} />
                         <TextField 
                             required 
-                            autoFocus 
                             margin="dense" 
                             name="email" 
                             label="Email Address" 
@@ -201,7 +198,6 @@ export default function RegistrationFormDialog() {
                             onChange={handleChange} />
                         <TextField 
                             required 
-                            autoFocus 
                             margin="dense" 
                             name="password" 
                             label="Password" 

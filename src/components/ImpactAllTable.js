@@ -173,7 +173,7 @@ export default function StickyHeadTable() {
           </Card>
         </Box>
 
-        : <p>Please wait! Fetching organisations...</p>
+        :<div style={{color:"white", fontSize:"20px"}}> <p>Please wait! Fetching organisations...</p> </div>
   }
   </div>
   )
