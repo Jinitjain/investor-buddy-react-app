@@ -133,13 +133,13 @@ export default function StickyHeadTable() {
         return table
       };
       const table = await fetchJSON();
-      console.log("TAble ",await table )
+      // console.log("TAble ",await table )
       setIsLoading(false);
 
       let ii = 0
       let obj =  Object.keys(await table).map(async (e,i) => {
         ii += 1
-              console.log(i, " ",await table[ii])
+              // console.log(i, " ",await table[ii])
                 temp.push(createData(table[i].symbol,table[i].company, table[i].sentiment,
                   table[i].date, table[i].news))
                 
