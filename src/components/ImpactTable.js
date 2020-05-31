@@ -61,6 +61,7 @@ const rows = [
   // createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
+const user = localStorage.getItem('user')
 
 export default function StickyHeadTable() {
   const classes = useStyles();
@@ -82,13 +83,14 @@ export default function StickyHeadTable() {
   React.useEffect(async () => {
     // Timer is in minute you want to refetch the data from api
     let timer = 5;
+    console.log(user)
     if (onlyOnceLoad) {
       console.log("Started Once")
       const temp = []
 
       async function fetchJSON() {
         var response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
-          user: 'j@j.com'
+          user: user
         })
 
         var table = await JSON.parse(JSON.stringify([...response.data.table]))

@@ -95,6 +95,7 @@ export default function LoginPortalDialog() {
         })
 
         if (response.status === 200) {
+            localStorage.setItem('user', state.portal.email);
             await handleClickOpenSuccessMessage()
         } else {
             handleClickOpenErrorMessage()

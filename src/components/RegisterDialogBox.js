@@ -109,6 +109,7 @@ export default function RegistrationFormDialog() {
         console.log(response)
 
         if (response.status === 200) {
+            localStorage.setItem('user', state.form.email);
             await handleClickOpenSuccessMessage()
         } else {
             handleClickOpenErrorMessage()

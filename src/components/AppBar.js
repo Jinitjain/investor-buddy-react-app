@@ -10,6 +10,7 @@ import LoginDialogBox from './LoginDialogBox.js'
 import RegisterDialogBox from './RegisterDialogBox.js'
 import {useSelector, useDispatch} from 'react-redux'
 import actions from "../actions";
+import {Link, BrowserRouter as Router} from 'react-router-dom'
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -30,6 +31,7 @@ export default function ButtonAppBar() {
 
   const handleClickOpen = () => {
     dispatch(actions.signOut())
+    localStorage.setItem('user', '');
     console.log(isLoggedIn)
   }
 
@@ -50,6 +52,14 @@ export default function ButtonAppBar() {
               LogOut
             </Button>
           : ''}
+
+          {isLoggedIn ?
+                <Link to="/table">
+                  <Button variant="filled" color="inherit">
+                    Table
+                  </Button>
+                </Link>
+              : ''}
         </Toolbar>
       </AppBar>
     </div>
