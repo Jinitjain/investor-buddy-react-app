@@ -23,8 +23,6 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const user = localStorage.getItem('user')
-
 export default function AnimatedMultiselectList() {
 
   const classes = useStyles();
@@ -45,7 +43,7 @@ export default function AnimatedMultiselectList() {
         console.log(companiesArray)
 
       const response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/makeRelation', {
-          user: user,
+          user: localStorage.getItem('user'),
           org: companiesArray
       })
 

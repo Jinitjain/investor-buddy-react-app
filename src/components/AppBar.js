@@ -11,6 +11,7 @@ import RegisterDialogBox from './RegisterDialogBox.js'
 import {useSelector, useDispatch} from 'react-redux'
 import actions from "../actions";
 import {Link, BrowserRouter as Router} from 'react-router-dom'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -31,7 +32,7 @@ export default function ButtonAppBar() {
 
   const handleClickOpen = () => {
     dispatch(actions.signOut())
-    localStorage.setItem('user', '');
+    localStorage.clear();
     console.log(isLoggedIn)
   }
 
