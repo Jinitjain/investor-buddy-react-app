@@ -101,7 +101,9 @@ export default function LoginPortalDialog() {
 
         if (response.status === 200) {
             localStorage.setItem('user', state.portal.email);
-            await handleClickOpenSuccessMessage()
+            const username = localStorage.getItem('user')
+            console.log(username)
+            handleClickOpenSuccessMessage()
         } else {
             handleClickOpenErrorMessage()
         }
