@@ -54,11 +54,17 @@ const useStyles = makeStyles({
 });
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 'https://stackoverflow.com/questions/57136853/make-a-material-ui-component-in-react-sticky-when-scrolling-not-appbar'),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
+  // createData('Frozen yoghurt', 159, 6.0, 24, 'https://stackoverflow.com/questions/57136853/make-a-material-ui-component-in-react-sticky-when-scrolling-not-appbar'),
+  // createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  // createData('Eclair', 262, 16.0, 24, 6.0),
   // createData('Cupcake', 305, 3.7, 67, 4.3),
   // createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData("", "", "", "",""),
+  createData("", "", "", "",""),
+  createData("", "", "", "",""),
+  createData("", "", "", "",""),
+  createData("", "", "", "",""),
+  
 ];
 
 const user = localStorage.getItem('user')
@@ -83,6 +89,7 @@ export default function StickyHeadTable() {
   React.useEffect(async () => {
     // Timer is in minute you want to refetch the data from api
     let timer = 5;
+    // let user1 = "j@j.com"
     console.log(user)
     if (onlyOnceLoad) {
       console.log("Started Once")
@@ -128,7 +135,7 @@ export default function StickyHeadTable() {
 
       async function fetchJSON() {
         var response = await axios.post('https://webappsvc-investor-buddy.azurewebsites.net/users/getUpdates', {
-          user: 'j@j.com'
+          user: user
         })
 
         var table = await JSON.parse(JSON.stringify([...response.data.table]))
@@ -208,7 +215,7 @@ export default function StickyHeadTable() {
           </Card>
         </Box>
 
-        : <p>Load ho raha hai bhai</p>
+        : <p>Please wait! Fetching organisations...</p>
   }
   </div>
   )
